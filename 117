@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+#include<cstring>
+using namespace std;
+int n;
+vector<int> cur[30];
+void Above(int d,int& p,int& q,int len){
+	for(p=0;p<len;p++)
+		for(q=0;q<cur[p].size();q++)
+			if(cur[p][q]==d)return;			
+} 
+void Return(int p1,int p2,int h){
+	for(int i=h;i<cur[p1].size();i++)
+		cur[p2].push_back(cur[p1][i]);
+	cur[p1].resize(h);
+}
+void Clear(int p,int h){
+	for(int i=h+1;i<cur[p].size();i++){
+		int b=cur[p][i];
+		cur[b].push_back(b);
+	}
+	cur[p].resize(h+1);
+}
+int main(){
+	int n,a,b;cin>>n;
+	string s,p;
+	for(int i=0;i<n;i++)cur[i].push_back(i);
+	while(cin>>s){
+		if(s=="quit")break;
+		cin>>a>>p>>b;
+		int pa,pb,ha,hb;
+		Above(a,pa,ha,n);
+		Above(b,pb,hb,n);
+		if(pa==pb)continue;
+		if(p=="onto")Clear(pb,hb);
+		if(s=="move")Clear(pa,ha);
+		Return(pa,pb,ha);
+	}
+	for(int i=0;i<n;i++){
+		printf("%d:",i);
+		for(int j=0;j<cur[i].size();j++)cout<<' '<<cur[i][j];
+		cout<<'\n';
+	}
+	return 0;
+}
